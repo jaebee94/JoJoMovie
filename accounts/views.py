@@ -4,6 +4,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 def signup(request):
@@ -20,7 +21,7 @@ def signup(request):
     context = {
         'form': form
     }
-    return render(request, 'caccounts/signup.html', context)
+    return render(request, 'accounts/signup.html', context)
 
 def login(request):
     if request.user.is_authenticated:
