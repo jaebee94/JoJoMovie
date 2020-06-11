@@ -21,6 +21,16 @@
     <input type="submit" value="삭제">
 </form>
 
+<p>댓글목록</p>
+{% for comment in review.comment_set.all %}
+    <p>[{{ comment.pk }}] : {{ comment.content }} </p>
+    <p>작성시각 : {{ comment.created_at }}</p>
+<form action="{% url 'community:comment_delete' review.pk comment.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="댓글 삭제">
+</form>
+{% endfor %}
+
 {% if user.is_authenticated %}
     <form action="{% url 'community:comment_create' review.pk %}" method="POST">
         {% csrf_token %}
