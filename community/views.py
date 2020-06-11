@@ -13,22 +13,19 @@ def index(request):
 
 @login_required
 def create(request):
-    if request.user.is_authenticated:
-        if request.method=='POST':
-            form = ReviewForm(request.POST)
-            if form.is_valid():
-                review = form.save(commit=False)
-                review.user = request.user
-                review.save()
-                return redirect('community:detail', review.pk)
-        else:
-            form = ReviewForm()
-        context = {
-            'form': form,
-        }
-        return render(request, 'community/form.html', context)
+    if request.method=='POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
+            return redirect('community:detail', review.pk)
     else:
-        return redirect('accounts:login')
+        form = ReviewForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'community/form.html', context)
 
 def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
