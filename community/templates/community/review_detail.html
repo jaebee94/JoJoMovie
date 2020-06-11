@@ -16,5 +16,17 @@
     <p>수정하려면 로그인하세요</p>
 {% endif %}
 
+<form action="{% url 'community:delete' review.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+</form>
+
+{% if user.is_authenticated %}
+    <form action="{% url 'community:comment_create' review.pk %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>댓글 작성</button>
+    </form>
+{% endif %}
 
 {% endblock %}
