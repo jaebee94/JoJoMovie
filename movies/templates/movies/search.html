@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>네이버 영화 검색</h1>
-<form action="{% url 'movies:search' %}" method="POST">
+<form action="{% url 'movies:search' %}" method="GET">
     <input type="text" name="keyword" placeholder="검색">
     <input type="submit" value="검색">
 </form>

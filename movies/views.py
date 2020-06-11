@@ -1,8 +1,6 @@
 from django.shortcuts import render
+import json
 import urllib.request
-
-
-
 
 def search(request):
     client_id = "Rhpsh4RYDE3hQWmTHV0Z"
@@ -10,7 +8,7 @@ def search(request):
 
     if request.method == 'GET':
         keyword = request.GET.get('keyword')    
-        encText = urllib.parse.quote(keyword)
+        encText = urllib.parse.quote('{}'.format(keyword))
         url = "https://openapi.naver.com/v1/search/movie?query=" + encText # json 결과
         movie_request = urllib.request.Request(url)
         movie_request.add_header("X-Naver-Client-Id",client_id)
@@ -28,4 +26,4 @@ def search(request):
         else:
             print("Error Code:" + rescode)
     
-    return render(request, 'search/search.html', context)
+    return render(request, 'movies/search.html', context)
