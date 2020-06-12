@@ -18,6 +18,7 @@
             <li class="nav-item active">
               <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
             </li>
+
             <li class="nav-item active">
                 <a class="nav-link" href="/accounts/login/">Login <span class="sr-only"></span></a>
             </li>
@@ -25,17 +26,19 @@
                 <a class="nav-link" href="/accounts/signup/">Signup <span class="sr-only"></span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/accounts/logout/">Logout <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/community/create/">글쓰기 <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item active">
                 <a class="nav-link" href="#">영화목록 <span class="sr-only"></span></a>
             </li>
+            {% if request.user.is_authenticated %}
             <li class="nav-item active">
-                <p>{{ user.username }}님 안녕하세요</p>
+              <a class="nav-link" href="/community/create/">글쓰기 <span class="sr-only"></span></a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:profile' user.pk %}">{{ request.user.username }}님 안녕하세요 <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/accounts/logout/">Logout <span class="sr-only"></span></a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </nav>
