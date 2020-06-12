@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>MOVIE</h1>
+
 <div id="app">
-  <!-- <p v-for="movie in movies" v-html="movie.title">{{ movie.title }}</p> -->
-  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <!-- <div class="container">
+    <div v-for="fourPosterUrls in posterUrls" class="row">
+      <img v-for="posterUrl in fourPosterUrls[0]" :src="posterUrl" class="col-3" alt="...">
+    </div>
+  </div> -->
+  <div id="carouselExampleIndicators" class="carousel slide" style="width: auto; margin: 0 5%; text-align: center;" data-ride="carousel">
+    <h1>BOX OFFICE</h1>
     <ol class="carousel-indicators">
       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
       <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
       <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
     </ol>
     <div class="carousel-inner">
-        <div v-for="movie in movies" class="carousel-item">
-          <img :src="movie.poster_path" class="d-block w-100" alt="...">
-        </div>
+      <div class="carousel-item row" style="width: auto;" v-for="fourPosterUrls in posterUrls">
+        <img v-for="posterUrl in fourPosterUrls[0]" :src="posterUrl" class="col-3" alt="...">
+      </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -32,7 +39,11 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+  $(document).ready(function () {
+    $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
+  });
   const API_KEY = 'AIzaSyA3AI1maKoEbHFJ189Qeww-AzfeZR4PC-g'
   const API_URL = 'https://www.googleapis.com/youtube/v3/search'
 
@@ -40,6 +51,7 @@
     el: '#app',
     data: {
       movies: Array,
+      posterUrls: [[],[],[],[],[]],
       movieTrailier: null,
       firstMovie: null,
       videoUrl: null,
@@ -52,8 +64,14 @@
             this.firstMovie = response.data['results'][0].original_title
             response.data["results"].forEach(item => {
               item.poster_path = `https://image.tmdb.org/t/p/original${item.poster_path}`
-              console.log(item.poster_path)
             })
+            for(var i=0; i<5; i++) {
+              temp = Array();
+              for(var j=i*4; j<i*4+4; j++) {
+                temp.push(this.movies[j].poster_path)
+              }
+              this.posterUrls[i].push(temp)
+            }
             axios.get(API_URL, {
               params: {
                 key: API_KEY,
@@ -63,11 +81,10 @@
               }
             })
               .then(response => {
-                
+                console.log(response.data.items[0].id.videoId)
                 this.videoUrl = `https://www.youtube.com/embed/${response.data.items[0].id.videoId}`
               })
-              .catch(error => {
-              })
+              .catch(error => console.log(error))
           })
       },
     },
