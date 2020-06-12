@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if request.resolver_match.url_name == 'create' %}
+<h2>새 리뷰 작성</h2>
+{% else %}
+<h2> 수정하기 </h2>
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="제출">
+</form>
+<a href="{% url 'community:index' %}">BACK</a>
+
+{% endblock %}
