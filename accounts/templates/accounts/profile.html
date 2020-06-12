@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>{{ user.username }}님의 프로필</p>
+<p>좋아하는 영화 : {{ user.like_movies.all|length }} 개</p>
+{% for like_movie in user.like_movies_set.all %}
+<p>{{ like_movie.title }}</p>
+{% endfor %}
+
+<p>쓴 리뷰</p>
+{% for review in user.review_set.all %}
+<p>{{ review.title }}</p>
+{% endfor %}
+{% endblock %}
