@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<h1>리뷰 목록</h1>
+{% for review in reviews %}
+    <a href="{% url 'community:detail' review.pk %}">
+    <p>제목: {{ review.title }}</p>
+    </a>   
+{% endfor %}
 {% endblock %}
