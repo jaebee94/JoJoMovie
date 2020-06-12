@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head> 
+<body>
+    <h1>MOVIE</h1>
+    <div id="app">
+        <button @click="boxOffice">현재 상영작</button>
+        <ul>
+            <p v-for="movie in movies">{{ movie.title }}</p>
+        </ul>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                movies: Array,
+            },
+            methods: {
+                boxOffice() {
+                    axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=f13f39298b386f7fec21be0041fc1451&language=ko-KR&page=1&region=kr')
+                        .then(response => {
+                            console.log(response.data['results'][0].title)
+                            this.movies = response.data["results"]
+                        })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
