@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head> 
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>MOVIE</h1>
     <div id="app">
         <button @click="boxOffice">현재 상영작</button>
-        <ul>
-            <p v-for="movie in movies">{{ movie.title }}</p>
-        </ul>
+        <p v-for="movie in movies" v-html="movie.title">{{ movie.title }}</p>
     </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -30,8 +23,10 @@
                             this.movies = response.data["results"]
                         })
                 }
+            },
+            mounted() {
+                this.boxOffice()
             }
         })
     </script>
-</body>
-</html>
+{% endblock %}
