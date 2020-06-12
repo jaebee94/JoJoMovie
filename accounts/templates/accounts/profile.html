@@ -23,6 +23,7 @@
     </div>
     <p>최근 좋아한 영화</p>
     <div class="row">
+        <!-- 부트스트랩 media list -->
         <!-- for문을 상위 4개만 돌려야함 -->
         {% for like_movie in user.like_movies_set.all %}
         <div class="col-6">

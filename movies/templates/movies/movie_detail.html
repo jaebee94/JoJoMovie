@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <h2>{{ movie.title }}</h2>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-4">
+                <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="card-img" alt="영화 포스터">
+            </div>
+            <div class="col">
+                <div class="card-body">
+                    {% for genre in movie.genres.all %}
+                    <p>장르 : {{ genre.name }}</p>
+                    {% endfor %}
+                    <p>개봉일 : {{ movie.release_date }}</p>
+                    <p>줄거리 : {{ movie.overview }}</p>
+            </div>
+        </div>
+        <!-- 영화 추천 4개 / for문으로 4개 -->
+        <div class="row">
+            <!-- {% for recommended in recommendation %}
+            <div class="col-3">
+            
+            </div>
+            {% endfor %} -->
+        </div>        
+    </div>
+{% endblock %}
