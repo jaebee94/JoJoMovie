@@ -2,6 +2,9 @@ from django.shortcuts import render
 import json
 import urllib.request
 
+def index(request):
+    return render(request, 'movies/index.html')
+
 def search(request):
     client_id = "Rhpsh4RYDE3hQWmTHV0Z"
     client_secret = "qlMewu7URE"
