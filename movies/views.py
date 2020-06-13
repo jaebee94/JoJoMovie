@@ -103,3 +103,6 @@ def detail(request, movie_pk):
         'recommend_list3' : recommend_list3,
     }
     return render(request, 'movies/movie_detail.html', context)
+
+def movie_list(request):
+    pass
