@@ -1,0 +1,54 @@
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollmonitor/1.2.0/scrollMonitor.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      movies: [],
+      page: 0,
+    },
+    methods: {
+      getMovies: function () {
+        axios.get('/movies/list/get_movies_json/', this.page++)
+          .then(res => {
+            console.log(res.data)
+            this.photos = [...this.movies, ...res.data]
+          })
+          .catch(err => console.log(err))
+      },
+      addScrollWatcher: function () {
+        const bottomSensor = document.querySelector('#bottomSensor')
+        const watcher = scrollMonitor.create(bottomSensor)
+        // watcher 가 화면에 들어오면, cb 하겠다.
+        watcher.enterViewport(() => {
+          setTimeout(() => {
+            this.getMovies()
+          }, 500)
+        })
+      },
+      scrollToTop: function () {
+        scroll(0, 0)
+      },
+      loadUntilViewportIsFull: function () {
+        const bottomSensor = document.querySelector('#bottomSensor')
+        const watcher = scrollMonitor.create(bottomSensor)
+        if (watcher.isFullyInViewport) {
+          this.getMovies()
+        }
+      }
+    },
+    // created: 초기화 이후 AJAX 요청을 보내기 좋은 시점(Data, Methods 에 접근 가능.)
+    created: function () {
+      this.getMovies()
+    },
+
+    // mounted: DOM 과 Vue 인스턴스가 연동이 완료되고 난 이후에 실행할 일들.
+    mounted: function () {
+      this.addScrollWatcher()
+    },
+
+    // updated: data({}) 가 바뀌고 나서, 화면이 다시 렌더된 이후.
+    updated: function () {
+      this.loadUntilViewportIsFull()
+    },
+  })
+</script> -->

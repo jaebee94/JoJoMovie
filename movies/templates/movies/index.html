@@ -39,9 +39,7 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 <script>
   $(document).ready(function () {
     $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
@@ -80,7 +78,7 @@
                 key: API_KEY,
                 part: 'snippet',
                 type: 'video',
-                q: this.firstMovie.original_title
+                q: this.firstMovie.original_title + 'trailer'
               }
             })
               .then(response => {

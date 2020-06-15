@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 import json
 import urllib.request
 from .models import Movie, Genre
@@ -105,4 +106,12 @@ def detail(request, movie_pk):
     return render(request, 'movies/movie_detail.html', context)
 
 def movie_list(request):
-    pass
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, 'movies/movie_list.html', context)
+
+# def get_movies_json(request, page):
+#     movies = Movie.objects.all()[page*20:(page+1)*20]
+#     return JsonResponse(movies)
