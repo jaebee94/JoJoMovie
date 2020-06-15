@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 # Create your views here.
 def index(request):
     articles = Article.objects.order_by('-pk')
-    paginator = Paginator(articles, 2)
+    paginator = Paginator(articles, 3)
 
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)

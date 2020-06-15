@@ -1,10 +1,42 @@
 {% extends 'base.html' %}
 {% block content%}
-    <h1>로그인</h1>
-    <hr>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>로그인</button>
-    </form>
+    <div class="text-center">
+        <form action="" method="POST" class="form-signin">
+            {% csrf_token %}
+            <h1>로그인</h1>
+            <input class="form-control" type="text" name="username" maxlength="50" autofocus_required id="id_username" placeholder="Username">
+            <input class="form-control" type="password" name="password" required id="id_password" placeholder="Passsword">
+            <div class="marginbox">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">로그인</button>
+            <br>
+            <a href="{% url 'accounts:signup' %}"><input type="btn" class="btn btn-primary btn-block" value="회원가입"></input></a>
+        </form>
+    </div>
+<style>
+.text-center {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+.form-control {
+    display: block;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid black;
+}
+.marginbox {
+    padding: 1.5rem;
+}
+</style>
 {% endblock %}
