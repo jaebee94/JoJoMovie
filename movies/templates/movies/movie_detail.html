@@ -12,12 +12,15 @@
             </div>
             <div class="col">
                 <div class="card-body">
-                    <p>장르 : </p>
-                    {% for genre in movie.genres.all %}
-                        <p>{{ genre.name }}</p>
-                    {% endfor %}
+                    <p>
+                        <span>장르 : </span>
+                        {% for genre in movie.genres.all %}
+                            <span>{{ genre.name }}</span>
+                        {% endfor %}
+                    </p>
                     <p>개봉일 : {{ movie.release_date }}</p>
-                    <p>줄거리 : {{ movie.overview }}</p>
+                    <h5>Overview</h5>
+                    <p>{{ movie.overview }}</p>
                 </div>
             </div>
         </div>
@@ -29,7 +32,9 @@
             {% for recommendation in recommendation_list %}
             <div class="col-3">
                 <p>{{ recommendation.title }} {{ recommendation.vote_average }}</p>
-                <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                <a href="{% url 'movies:detail' recommendation.id %}">
+                    <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                </a>
             </div>
             {% endfor %}
 
@@ -40,7 +45,9 @@
             {% for recommendation in recommend_list1 %}
             <div class="col-3">
                 <p>{{ recommendation.title }} {{ recommendation.vote_average }}</p>
-                <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                <a href="{% url 'movies:detail' recommendation.id %}">
+                    <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                </a>
             </div>
             {% endfor %}
 
@@ -49,16 +56,20 @@
             {% for recommendation in recommend_list2 %}
             <div class="col-3">
                 <p>{{ recommendation.title }} {{ recommendation.vote_average }}</p>
-                <img src="https://image.tmdb.org/t/p/original/{{ recommendation2.poster_path }}" class="card-img" alt="영화 포스터">
+                <a href="{% url 'movies:detail' recommendation.id %}">
+                    <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                </a>
             </div>
             {% endfor %}
 
-            {% elif genre_cnt >= 2 %}            
+            {% elif genre_cnt >= 2 %}
 
             {% for recommendation in recommend_list3 %}
             <div class="col-3">
                 <p>{{ recommendation.title }} {{ recommendation.vote_average }}</p>
-                <img src="https://image.tmdb.org/t/p/original/{{ recommendation2.poster_path }}" class="card-img" alt="영화 포스터">
+                <a href="{% url 'movies:detail' recommendation.id %}">
+                    <img src="https://image.tmdb.org/t/p/original/{{ recommendation.poster_path }}" class="card-img" alt="영화 포스터">
+                </a>
             </div>
             {% endfor %}
             {% endif %}

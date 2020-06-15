@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Movie List</h1>
+  {% for movie in movies %}
+    <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
+  {% endfor %}
+
+<style>
+  img {
+    max-width: 200px;
+  }
+</style>
+{% endblock %}

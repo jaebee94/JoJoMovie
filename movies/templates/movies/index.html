@@ -1,14 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div id="app">
-  <!-- <div class="container">
-    <div v-for="fourPosterUrls in posterUrls" class="row">
-      <img v-for="posterUrl in fourPosterUrls[0]" :src="posterUrl" class="col-3" alt="...">
-    </div>
-  </div> -->
-  <div id="carouselExampleIndicators" class="carousel slide" style="width: auto; margin: 0 5%; text-align: center;" data-ride="carousel">
+  <div id="carouselExampleIndicators" class="carousel slide boxoffice" data-ride="carousel">
     <h1>BOX OFFICE</h1>
     <ol class="carousel-indicators">
       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -19,7 +13,9 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item row" style="width: auto;" v-for="fourPosterUrls in posterUrls">
-        <img v-for="posterUrl in fourPosterUrls[0]" :src="posterUrl" class="col-3" alt="...">
+        <a href="" v-for="posterUrl in fourPosterUrls[0]">
+          <img :src="posterUrl" class="col-3 poster" alt="...">
+        </a>
       </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -31,28 +27,32 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
-  <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" :src="videoUrl" allowfullscreen>
-    </iframe>
+  <div class="trailer" style="margin: 0 5%;">
+    <div class="embed-responsive embed-responsive-16by9 trailer-video">
+      <iframe class="embed-responsive-item" :src="videoUrl" allowfullscreen>
+      </iframe>
+    </div>
+    <div class="trailer-content" >
+      <h1 v-html="firstMovie.title"></h1>
+      <p v-html="firstMovie.overview"></p>
+    </div>
   </div>
 </div>
 
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 <script>
   $(document).ready(function () {
     $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
   });
-  const API_KEY = 'AIzaSyA3AI1maKoEbHFJ189Qeww-AzfeZR4PC-g'
-  const API_URL = 'https://www.googleapis.com/youtube/v3/search'
 
+  const API_KEY = 'AIzaSyCk0-i5aOX5F3T3u8feOXS_VGROF14OKzI'
+  const API_URL = 'https://www.googleapis.com/youtube/v3/search'
   const app = new Vue({
+
     el: '#app',
     data: {
       movies: Array,
-      posterUrls: [[],[],[],[],[]],
-      movieTrailier: null,
+      posterUrls: [[], [], [], [], []],
       firstMovie: null,
       videoUrl: null,
     },
@@ -61,23 +61,24 @@
         axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=f13f39298b386f7fec21be0041fc1451&language=ko-KR&page=1&region=kr')
           .then(response => {
             this.movies = response.data["results"]
-            this.firstMovie = response.data['results'][0].original_title
+            this.firstMovie = response.data['results'][0]
             response.data["results"].forEach(item => {
               item.poster_path = `https://image.tmdb.org/t/p/original${item.poster_path}`
             })
-            for(var i=0; i<5; i++) {
+            for (var i = 0; i < 5; i++) {
               temp = Array();
-              for(var j=i*4; j<i*4+4; j++) {
+              for (var j = i * 4; j < i * 4 + 4; j++) {
                 temp.push(this.movies[j].poster_path)
               }
               this.posterUrls[i].push(temp)
             }
+            console.log(API_URL)
             axios.get(API_URL, {
               params: {
                 key: API_KEY,
                 part: 'snippet',
                 type: 'video',
-                q: this.firstMovie
+                q: this.firstMovie.original_title + 'trailer'
               }
             })
               .then(response => {
@@ -90,12 +91,31 @@
     },
     computed: {
       posterUrl() {
-        return 
+        return
       }
     },
     mounted() {
-        this.boxOffice()
+      this.boxOffice()
     }
   })
 </script>
+
+<style>
+.boxoffice{
+  width: auto;
+  margin: 5%;
+  padding: 1%;
+  text-align: center;
+  border: 2px solid black;
+  background-color:darkgray;
+}
+
+.boxoffice img{
+}
+
+.trailer{
+  display: grid;
+  grid-template-columns: 60% 1fr;
+}
+</style>
 {% endblock %}
