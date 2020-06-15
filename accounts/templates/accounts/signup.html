@@ -1,10 +1,59 @@
 {% extends 'base.html' %}
 {% block content%}
-    <h1>회원가입</h1>
-    <hr>
-    <form action="" method="POST">
+<div class="text-center">
+    <form action="" method="POST" class="form-signup">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">회원가입</button>
-    </form>
+        <h1>회원가입</h1>
+        <label for="id_username">아이디</label>
+        <input class="form-control" type="text" name="username" maxlength="50" autofocus_required id="id_username" placeholder="Username">
+        <span class="helptext">아이디는 50자 이하 문자, 숫자만 가능합니다.</span>
+        <br>
+        <label for="id_password1">비밀번호</label>
+        <input class="form-control" type="password" name="password1" required id="id_password1" placeholder="Passsword">
+        <span class="helptext">
+            <p>다른 개인정보와 비슷한 비밀번호는 사용할 수 없습니다.</p>
+            <p>비밀번호는 최소 8자 이상이어야 합니다.</p>
+            <p>일상적으로 사용되는 비밀번호일 수 없습니다.</p>
+            <p>비밀번호는 전부 숫자일 수 없습니다.</p>
+        </span>
+        <label for="id_password2">비밀번호 확인</label>
+        <input class="form-control" type="password" name="password2" required id="id_password2" placeholder="Passsword Check">
+        <span class="helptext">
+            <p>확인을 위해 이전과 동일한 비밀번호를 입력하시오.</p>
+        </span>
+
+        <div class="marginbox">
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">회원가입</button>
+        </form>
+    </div>
+    <style>
+        .text-center {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .form-signup {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+        .form-control {
+            display: block;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid black;
+        }
+        .marginbox {
+            padding: 1.5rem;
+        }
+        .helptext {
+            font-size: 0.7rem;
+        }
+        </style>
 {% endblock %}
