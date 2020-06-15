@@ -1,10 +1,10 @@
 from django import forms
-from .models import Review, Comment
+from .models import Article, Comment
 
-class ReviewForm(forms.ModelForm):
+class ArticleForm(forms.ModelForm):
     class Meta:
-        model = Review
-        fields = ['title', 'movie_title', 'content']
+        model = Article
+        fields = ['title', 'content']
 
 class CommentForm(forms.ModelForm):
     class Meta:

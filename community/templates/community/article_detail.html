@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>article Detail Page</h1>
+
+<p>{{ article.pk }}번째 리뷰</p>
+<p>리뷰제목 : {{ article.title }}</p>
+<p>리뷰영화 : {{ article.movie_title }}</p>
+<p>리뷰내용 : {{ article.content }}</p>
+<p>작성시각 : {{ article.created_at }}</p>
+<p>수정시각 : {{ article.updated_at }}</p>
+
+{% if user.is_authenticated %} 
+    <a href="{% url 'community:update' article.pk %}">수정</a>
+{% else %}
+    <p>수정하려면 로그인하세요</p>
+{% endif %}
+
+<form action="{% url 'community:delete' article.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+</form>
+
+<p>댓글목록</p>
+{% for comment in article.comment_set.all %}
+    <p>[{{ comment.pk }}] : {{ comment.content }} </p>
+    <p>작성시각 : {{ comment.created_at }}</p>
+<form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="댓글 삭제">
+</form>
+{% endfor %}
+
+{% if user.is_authenticated %}
+    <form action="{% url 'community:comment_create' article.pk %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>댓글 작성</button>
+    </form>
+{% endif %}
+
+{% endblock %}
