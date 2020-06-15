@@ -1,90 +1,98 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from .models import Review, Comment
-from .forms import ReviewForm, CommentForm
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
+from django.core.paginator import Paginator
+
 # Create your views here.
 def index(request):
-    reviews = Review.objects.order_by('-pk')
+    articles = Article.objects.order_by('-pk')
+    paginator = Paginator(articles, 2)
+
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
+
     context = {
-        'reviews': reviews
+        'articles': articles,
+        'page_obj': page_obj,
     }
     return render(request, 'community/index.html', context)
 
 @login_required
 def create(request):
     if request.method=='POST':
-        form = ReviewForm(request.POST)
+        form = ArticleForm(request.POST)
         if form.is_valid():
-            review = form.save(commit=False)
-            review.user = request.user
-            review.save()
-            return redirect('community:detail', review.pk)
+            article = form.save(commit=False)
+            article.user = request.user
+            article.save()
+            return redirect('community:detail', article.pk)
     else:
-        form = ReviewForm()
+        form = ArticleForm()
     context = {
         'form': form,
     }
     return render(request, 'community/form.html', context)
 
-def detail(request, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
+def detail(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
     form = CommentForm()
     context = {
-        'review': review,
+        'article': article,
         'form': form,
     }
-    return render(request, 'community/review_detail.html', context)
+    return render(request, 'community/article_detail.html', context)
 
 @login_required
-def update(request, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
-    if request.user==review.user:
+def update(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    if request.user==article.user:
         if request.method=='POST':
-            form = ReviewForm(request.POST, instance=review)
+            form = ArticleForm(request.POST, instance=article)
             if form.is_valid():
-                review = form.save(commit=False)
-                review.user = request.user
-                review.save()
-                return redirect('community:detail', review.pk)
+                article = form.save(commit=False)
+                article.user = request.user
+                article.save()
+                return redirect('community:detail', article.pk)
         else:
-            form = ReviewForm(instance=review)
+            form = ArticleForm(instance=article)
         context = {
             'form': form
         }
         return render(request, 'community/form.html', context)
-    return redirect('community:detail', review.pk)
+    return redirect('community:detail', article.pk)
 
 @login_required
-def delete(request, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
-    if request.user==review.user:
-        review.delete()
+def delete(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    if request.user==article.user:
+        article.delete()
     else:
-        return redirect('community:detail', review.pk)
+        return redirect('community:detail', article.pk)
     return redirect('community:index')
 
 @require_POST
-def comment_create(request, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
+def comment_create(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
     form = CommentForm(request.POST)
     if form.is_valid():
         comment = form.save(commit=False)
         comment.user = request.user
-        comment.review = review
+        comment.article = article
         comment.save()
-    return redirect('community:detail', review.pk)
+    return redirect('community:detail', article.pk)
 
 @login_required
-def comment_delete(request, review_pk, comment_pk):
+def comment_delete(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.user==comment.user:
         comment.delete()
-    return redirect('community:detail', review_pk)
+    return redirect('community:detail', article_pk)
 
 @login_required
-def comment_update(request, review_pk, comment_pk):
-    review = get_object_or_404(Review, pk=review_pk)
+def comment_update(request, article_pk, comment_pk):
+    article = get_object_or_404(Article, pk=article_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.user==comment.user:
         if request.method=='POST':
@@ -93,11 +101,11 @@ def comment_update(request, review_pk, comment_pk):
                 comment = form.save(commit=False)
                 comment.user = request.user
                 comment.save()
-                return redirect('community:detail', review.pk)
+                return redirect('community:detail', article.pk)
         else:
             form = CommentForm(instance=comment)
         context = {
             'form': form
         }
         return render(request, 'community/form.html', context)
-    return redirect('community:detail', review.pk)
+    return redirect('community:detail', article.pk)

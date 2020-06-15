@@ -1,10 +1,100 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>리뷰 목록</h1>
-{% for review in reviews %}
-    <a href="{% url 'community:detail' review.pk %}">
-    <p>제목: {{ review.title }}</p>
-    </a>   
-{% endfor %}
+<h1>자유 게시판</h1>
+<div class="container">
+    <div class="section">
+        <table class="table">
+            <colgroup>
+                <col width="80">
+                <col width="*">
+                <col width="110">
+                <col width="110">
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">등록일</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for article in page_obj %}
+                <tr>
+                    <th scope="row">{{ article.pk }}</th>
+                    <td><a herf="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
+                    <td>{{ article.user }}</td>
+                    <td>{{ article.created_at|date:"Y-m-d" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <nav>
+        <ul class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <li class="page-item disabled">
+                        <a href="?page=1">&laquo; 처음</a>
+                    </li>
+                    <li class="page-item"
+                        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+                {% endif %}
+
+
+                <li class="page-item"><a class="page-link" href="#"></a></li>
+    
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+        
+                {% if page_obj.has_next %}
+                <li class="page-item disabled">
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">끝 &raquo;</a>
+                </li>
+                {% endif %}
+            </span>
+        </ul>
+    </nav>
+</div>
+
+<style>
+.continer {
+    min-width: 960px;
+}
+.section {
+    width: 960px;
+}
+.table {
+    display: table;
+    box-sizing: border-box;
+    width: 100% ;
+    border-spacing: 2px;
+    text-align: center;
+    line-height: 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    padding: 10px 0 10px;
+}
+.thead {
+    display: table-header-group;
+    vertical-align: middle;
+}
+.th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+.tr {
+    display: table-row;
+}
+.colgroup {
+    display: table-column-group;
+}
+
+</style>
+
 {% endblock %}
+
