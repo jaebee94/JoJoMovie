@@ -1,14 +1,94 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Movie List</h1>
-  {% for movie in movies %}
-    <img src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
-  {% endfor %}
+<h1>Movie List</h1>
+{% for movie in movies %}
+<div class="movie-container">
+  <img class="movie-poster" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
+  <div class="movie-star-review starRev {{movie.id}}">
+    <span data-id="{{ movie.id }}" class="star half starR1" value="0.5">별1_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star one starR2" vlaue="1">별1_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star one_half starR1" vlaue="1.5">별2_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star two starR2" vlaue="2">별2_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star two_half starR1" vlaue="2.5">별3_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star three starR2" vlaue="3">별3_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star three_half starR1" vlaue="3.5">별4_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star four starR2" vlaue="4">별4_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star four_half starR1" vlaue="4.5">별5_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star five starR2" vlaue="5">별5_오른쪽</span>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+  $(document).ready(function () {
+    $('.starRev span').on('mouseenter', function () {
+      $(this).parent().children('span').removeClass('on');
+      $(this).addClass('on').prevAll('span').addClass('on');
+    });
+
+    $('.starRev span').on('mouseleave', function () {
+      $(this).parent().children('span').removeClass('on');
+    });
+  })
+
+  $('.starRev span').click(function () {
+    $('.starRev span').off();
+    $(this).parent().children('span').removeClass('on');
+    $(this).addClass('on').prevAll('span').addClass('on');
+    return false;
+  });
+
+  const starButtons = document.querySelectorAll('.star')
+  starButtons.forEach(function (starButton) {
+    starButton.addEventListener('click', function (event) {
+      const movieId = event.target.dataset.id
+      {% if request.user.is_authenticated %}
+      axios.get(`/movies/list/${movieId}/${starPoint}`)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+
+        })
+      {% else %}
+      alert('로그인이 필요합니다.')
+      {% endif %}
+    })
+  })
+</script>
 
 <style>
   img {
     max-width: 200px;
+  }
+
+  .starR1 {
+    background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -52px 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float: left;
+    text-indent: -9999px;
+    cursor: pointer;
+  }
+
+  .starR2 {
+    background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float: left;
+    text-indent: -9999px;
+    cursor: pointer;
+  }
+
+  .starR1.on {
+    background-position: 0 0;
+  }
+
+  .starR2.on {
+    background-position: -15px 0;
   }
 </style>
 {% endblock %}
