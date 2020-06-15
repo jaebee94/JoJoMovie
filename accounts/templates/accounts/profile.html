@@ -4,59 +4,60 @@
 <p>{{ user.username }}님의 프로필</p>
 
 <div class="contatiner">
-    <div class="row">
-        <div class="col-2">
-            <p>좋아한 영화</p>
-            <p>{{ user.like_movies.all|length }} 개</p>
-        </div>
-        <div class="col-2">
-            <p>작성한 리뷰</p>
-            <p>{{ user.review.all|length }} 개</p>
-        </div>
-        <div class="col-2">
-            <p>작성한 댓글</p>
-            <p>{{ user.comment.all|length }} 개</p>
-        </div>
-        <div class="col-6">
-            <p>Ai(beta) 기반 추천 영화</p>
-        </div>
+  <div class="row">
+    <div class="col-2">
+      <p>좋아한 영화</p>
+      <p>{{ user.like_movies.all|length }} 개</p>
     </div>
-    <p>최근 좋아한 영화</p>
-    <div class="row">
-        <!-- 부트스트랩 media list -->
-        <!-- for문을 상위 4개만 돌려야함 -->
-        {% for like_movie in user.like_movies_set.all %}
-        <div class="col-6">
-            <p>영화1</p>
-            <p>{{ like_movie.title }}</p>
-        </div>
-        <div class="col-6">
-            <p>영화2</p>
-            <p>{{ like_movie.title }}</p>
-        </div>
-        <div class="col-6">
-            <p>영화3</p>
-            <p>{{ like_movie.title }}</p>
-        </div>
-        <div class="col-6">
-            <p>영화4</p>
-            <p>{{ like_movie.title }}</p>
-        </div>
-        {% endfor %}
+    <div class="col-2">
+      <p>작성한 리뷰</p>
+      <p>{{ user.review.all|length }} 개</p>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <p>최근 작성한 리뷰</p>
-            {% for review in user.review_set.all %}
-            <p>{{ review.title }}</p>
-            {% endfor %}
-            <p></p>
-        </div><div class="col-6">
-            <p>최근 작성한 댓글</p>
-            {% for review in user.comment_set.all %}
-            <p>{{ comment.content }}</p>
-            {% endfor %}
-        </div>
+    <div class="col-2">
+      <p>작성한 댓글</p>
+      <p>{{ user.comment.all|length }} 개</p>
     </div>
+    <div class="col-6">
+      <p>Ai(beta) 기반 추천 영화</p>
+    </div>
+  </div>
+  <p>최근 좋아한 영화</p>
+  <div class="row">
+    <!-- 부트스트랩 media list -->
+    <!-- for문을 상위 4개만 돌려야함 -->
+    {% for like_movie in user.like_movies_set.all %}
+    <div class="col-6">
+      <p>영화1</p>
+      <p>{{ like_movie.title }}</p>
+    </div>
+    <div class="col-6">
+      <p>영화2</p>
+      <p>{{ like_movie.title }}</p>
+    </div>
+    <div class="col-6">
+      <p>영화3</p>
+      <p>{{ like_movie.title }}</p>
+    </div>
+    <div class="col-6">
+      <p>영화4</p>
+      <p>{{ like_movie.title }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p>최근 작성한 리뷰</p>
+      {% for review in user.review_set.all %}
+      <p>{{ review.title }}</p>
+      {% endfor %}
+      <p></p>
+    </div>
+    <div class="col-6">
+      <p>최근 작성한 댓글</p>
+      {% for review in user.comment_set.all %}
+      <p>{{ comment.content }}</p>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 import urllib.request
@@ -115,3 +116,24 @@ def movie_list(request):
 # def get_movies_json(request, page):
 #     movies = Movie.objects.all()[page*20:(page+1)*20]
 #     return JsonResponse(movies)
+
+@login_required
+def star_review(request, movie_pk, star_point):
+    user = request.user
+    movie = get_object_or_404(Movie, pk=movie_pk)
+
+    # movie.stars.
+
+    if movie.like_users.filter(pk=user.pk).exists():
+        movie.like_users.remove(user)
+        liked = False
+    else:
+        movie.like_users.add(user)
+        liked = True
+
+    return JsonResponse({
+        'liked' : liked,
+        'like_count' : movie.like_users.count(),
+    })
+
+
