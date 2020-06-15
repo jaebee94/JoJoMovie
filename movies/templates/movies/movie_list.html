@@ -6,16 +6,16 @@
 <div class="movie-container">
   <img class="movie-poster" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
   <div class="movie-star-review starRev {{movie.id}}">
-    <span data-id="{{ movie.id }}" class="star half starR1" value="0.5">별1_왼쪽</span>
-    <span data-id="{{ movie.id }}" class="star one starR2" vlaue="1">별1_오른쪽</span>
-    <span data-id="{{ movie.id }}" class="star one_half starR1" vlaue="1.5">별2_왼쪽</span>
-    <span data-id="{{ movie.id }}" class="star two starR2" vlaue="2">별2_오른쪽</span>
-    <span data-id="{{ movie.id }}" class="star two_half starR1" vlaue="2.5">별3_왼쪽</span>
-    <span data-id="{{ movie.id }}" class="star three starR2" vlaue="3">별3_오른쪽</span>
-    <span data-id="{{ movie.id }}" class="star three_half starR1" vlaue="3.5">별4_왼쪽</span>
-    <span data-id="{{ movie.id }}" class="star four starR2" vlaue="4">별4_오른쪽</span>
-    <span data-id="{{ movie.id }}" class="star four_half starR1" vlaue="4.5">별5_왼쪽</span>
-    <span data-id="{{ movie.id }}" class="star five starR2" vlaue="5">별5_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star half starR1" data-value="0.5">별1_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star one starR2" data-value="1">별1_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star one_half starR1" data-value="1.5">별2_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star two starR2" data-value="2">별2_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star two_half starR1" data-value="2.5">별3_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star three starR2" data-value="3">별3_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star three_half starR1" data-value="3.5">별4_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star four starR2" data-value="4">별4_오른쪽</span>
+    <span data-id="{{ movie.id }}" class="star four_half starR1" data-value="4.5">별5_왼쪽</span>
+    <span data-id="{{ movie.id }}" class="star five starR2" data-value="5">별5_오른쪽</span>
   </div>
 </div>
 {% endfor %}
@@ -42,18 +42,17 @@
   const starButtons = document.querySelectorAll('.star')
   starButtons.forEach(function (starButton) {
     starButton.addEventListener('click', function (event) {
+      console.log(event.target.dataset)
+      const starPoint = event.target.dataset.value
       const movieId = event.target.dataset.id
-      {% if request.user.is_authenticated %}
-      axios.get(`/movies/list/${movieId}/${starPoint}`)
+      console.log(movieId, starPoint)
+      axios.get(`/movies/list/${movieId}/${starPoint}/`)
         .then(response => {
           console.log(response)
         })
         .catch(error => {
 
         })
-      {% else %}
-      alert('로그인이 필요합니다.')
-      {% endif %}
     })
   })
 </script>
