@@ -5,6 +5,8 @@ import json
 import urllib.request
 from .models import Movie, Genre
 
+from .forms import RatingForm
+
 def index(request):
     return render(request, 'movies/index.html')
 
@@ -119,21 +121,12 @@ def movie_list(request):
 
 @login_required
 def star_review(request, movie_pk, star_point):
-    user = request.user
     movie = get_object_or_404(Movie, pk=movie_pk)
-
-    # movie.stars.
-
-    if movie.like_users.filter(pk=user.pk).exists():
-        movie.like_users.remove(user)
-        liked = False
-    else:
-        movie.like_users.add(user)
-        liked = True
-
-    return JsonResponse({
-        'liked' : liked,
-        'like_count' : movie.like_users.count(),
-    })
-
-
+    form = RatingForm()
+    rating = form.save(commit=False)
+    rating.user = request.user
+    rating.movie = movie
+    rating.point = star_point
+    if form.is_valid():
+        rating = form.save()
+    return JsonResponse({})
