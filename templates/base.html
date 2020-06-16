@@ -13,35 +13,33 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/community/">조조영화</a>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'movies:index' %}">조조영화</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
+            
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'movies:index' %}">Home <span class="sr-only"></span></a>
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="/accounts/login/">Login <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/accounts/signup/">Signup <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">영화목록 <span class="sr-only"></span></a>
+                <a class="nav-link" href="{% url 'movies:movie_list' %}">영화목록 <span class="sr-only"></span></a>
             </li>
             {% if request.user.is_authenticated %}
             <li class="nav-item active">
-              <a class="nav-link" href="/community/create/">글쓰기 <span class="sr-only"></span></a>
+              <a class="nav-link" href="{% url 'community:index' %}">게시판 <span class="sr-only"></span></a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'accounts:profile' user.pk %}">{{ request.user.username }}님 안녕하세요 <span class="sr-only"></span></a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/accounts/logout/">Logout <span class="sr-only"></span></a>
+              <a class="nav-link" href="{% url 'accounts:logout' %}">Logout <span class="sr-only"></span></a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:login' %}">Login <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:signup' %}}">Signup <span class="sr-only"></span></a>
             </li>
             {% endif %}
           </ul>
@@ -56,3 +54,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<style>
+  body{
+    background-color:cornsilk;
+    width: 1200px;
+    margin: 0 auto;
+  }
+
+  nav{
+    width: 1200px;
+  }
+</style>
