@@ -10,13 +10,13 @@ from movies.models import Rating, Movie
 # Create your views here.
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('community:index')
+        return redirect('movies:index')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('community:index')
+            return redirect('movies:index')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -26,12 +26,12 @@ def signup(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect('community:index')
+        return redirect('movies:index')
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('community:index')
+            return redirect('movies:index')
     else:
         form = AuthenticationForm()
     context = {
@@ -42,7 +42,7 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect('community:index')
+    return redirect('movies:index')
 
 @login_required
 def profile(request, pk):
