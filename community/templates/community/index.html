@@ -2,17 +2,17 @@
 
 {% block content %}
 <div class="container">
-    <h1>자유 게시판</h1>
+    <h2>자유 게시판</h2>
     <div class="board-search">
         <form action="" method="get" id="search_form">
             <div class="form-row align-items-center justify-content-end">
                 <select name="search_type" id="search_type">
-                    {% if 'title' in selected_val  %}
-                        <option value="title" selected>제목</option>;
-                        <option value="content">내용</option>;
+                    {% if 'content' in selected_val  %}
+                    <option value="title">제목</option>;
+                    <option value="content" selected>내용</option>;
                     {% else %}
-                        <option value="title">제목</option>;
-                        <option value="content" selected>내용</option>;
+                    <option value="title" selected>제목</option>;
+                    <option value="content">내용</option>;
                     {% endif %}
                 </select>
                 <div class="col-sm-3 my-1">
@@ -53,6 +53,11 @@
             </tbody>
         </table>
     </div>
+    {% if request.user.is_authenticated %}
+    <div class="create_btn">
+        <a href="{% url 'community:create' %}"><button type="button" class="btn btn-primary">글쓰기</button></a>
+    </div>
+    {% endif %}
     <nav>
         <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
@@ -118,6 +123,12 @@
 }
 .colgroup {
     display: table-column-group;
+}
+.create_btn {
+    text-align: right;
+}
+.create_btn > button > a {
+    text-decoration : none;
 }
 </style>
 

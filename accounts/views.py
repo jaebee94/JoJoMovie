@@ -22,7 +22,7 @@ def signup(request):
     context = {
         'form': form
     }
-    return render(request, 'accounts/signup.html', context)
+    return render(request, 'accounts/login_signup.html', context)
 
 def login(request):
     if request.user.is_authenticated:
@@ -37,7 +37,7 @@ def login(request):
     context = {
         'form' : form
     }
-    return render(request, 'accounts/login.html', context)
+    return render(request, 'accounts/login_signup.html', context)
 
 @login_required
 def logout(request):
