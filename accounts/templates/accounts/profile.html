@@ -1,65 +1,98 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>{{ user.username }}님의 프로필</p>
-{% for recommend_movie in recommend_movies %}
-  {{ recommend_movie.title }}
-{% endfor %}
-<div class="contatiner">
-  <div class="row">
-    <div class="col-2">
-      <p>좋아한 영화</p>
-      <p>{{ user.like_movies.all|length }} 개</p>
-    </div>
-    <div class="col-2">
-      <p>작성한 글</p>
-      <p>{{ user.article_set.all|length }} 개</p>
-    </div>
-    <div class="col-2">
-      <p>작성한 댓글</p>
-      <p>{{ user.comment_set.all|length }} 개</p>
-    </div>
-    <div class="col-6">
-      <p>Ai(beta) 기반 추천 영화</p>
-    </div>
+<div class="profile">
+  <div>
+    <h1>{{ user.username }} 님의 프로필</h1>
+    <hr>
   </div>
-  <p>최근 좋아한 영화</p>
-  <div class="row">
-    <!-- 부트스트랩 media list -->
-    <!-- for문을 상위 4개만 돌려야함 -->
-    {% for like_movie in user.like_movies_set.all %}
-    <div class="col-6">
-      <p>영화1</p>
-      <p>{{ like_movie.title }}</p>
+    <div class="contatiner">
+      <div class="row">
+        <div class="col-2">
+          <p>평가한 영화</p>
+          <p>{{ user_ratings|length }} 개</p>
+        </div>
+        <div class="col-2">
+          <p>작성한 글</p>
+          <p>{{ user.article_set.all|length }} 개</p>
+        </div>
+        <div class="col-2">
+          <p>작성한 댓글</p>
+          <p>{{ user.comment_set.all|length }} 개</p>
+        </div>
+      </div>
     </div>
-    <div class="col-6">
-      <p>영화2</p>
-      <p>{{ like_movie.title }}</p>
+    <hr>
+    <div class="recommend-box">
+      <div class="recommend-box-title">
+        <h3>추천영화</h3>
+        <span>{{ user.username }}님이 가장 선호하는 장르는 <strong>{{ most_liked_genre }}</strong>입니다.</span>
+      </div>
+      <div id="carouselExampleIndicators" class="carousel slide movie-slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+        </ol>
+        <div class="carousel-inner">
+          {% for movie_list in recommended_list %}
+          <div class="carousel-item row recommend-box-movie">
+            {% for movie in movie_list %}
+            <a href="{% url 'movies:detail' movie.pk %}">
+              <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" class="col poster" alt="...">
+            </a>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
-    <div class="col-6">
-      <p>영화3</p>
-      <p>{{ like_movie.title }}</p>
+    <hr>
+    <div>
+      <div class="liked-box">
+        <h3>찜한 영화</h3>
+
+      </div>
     </div>
-    <div class="col-6">
-      <p>영화4</p>
-      <p>{{ like_movie.title }}</p>
-    </div>
-    {% endfor %}
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <p>최근 작성한 글</p>
-      {% for article in user.article_set.all %}
-      <p>{{ article.title }}</p>
-      {% endfor %}
-      <p></p>
-    </div>
-    <div class="col-6">
-      <p>최근 작성한 댓글</p>
-      {% for comment in user.comment_set.all %}
-      <p>{{ comment.content }}</p>
-      {% endfor %}
-    </div>
-  </div>
 </div>
+<script>
+  $(document).ready(function () {
+    $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
+  });
+</script>
+
+<style>
+  .profile{
+    border: black solid 1px;
+    border-radius: 5px;
+    padding: 15px;
+  }
+  .recommend-box{
+    justify-content: center;
+    text-align: center;
+  }
+  .recommend-box-title{
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .movie-slide{
+    justify-content: center;
+    text-align: center;
+  }
+  .recommend-box-movie{
+    margin: 0 auto;
+  }
+  .recommend-box-movie a{
+    text-decoration: none;
+  }
+  .poster{
+    width: 190px;
+    height: 250px;
+  }
+  .indicator{
+    width: 50px;
+  }
+
+</style>
 {% endblock %}
