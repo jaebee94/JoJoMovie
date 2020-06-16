@@ -2,7 +2,9 @@
 
 {% block content %}
 <p>{{ user.username }}님의 프로필</p>
-
+{% for recommend_movie in recommend_movies %}
+  {{ recommend_movie.title }}
+{% endfor %}
 <div class="contatiner">
   <div class="row">
     <div class="col-2">

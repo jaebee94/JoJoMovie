@@ -126,7 +126,13 @@ def star_review(request, movie_pk, star_point):
     rating = form.save(commit=False)
     rating.user = request.user
     rating.movie = movie
-    rating.point = star_point
-    if form.is_valid():
-        rating = form.save()
+    if float(star_point) <= 5:
+        rating.point = float(star_point)
+        rating.save()
+
+    # if form.is_valid():
+    #     rating = form.save()
+    # else:
+    #     print('실패')
+
     return JsonResponse({})

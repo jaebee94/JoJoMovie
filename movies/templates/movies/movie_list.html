@@ -5,7 +5,7 @@
 {% for movie in movies %}
 <div class="movie-container">
   <img class="movie-poster" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
-  <div class="movie-star-review starRev {{movie.id}}">
+  <div class="movie-star-review starRev {{movie.id}}" id="event-{{movie.id}}">
     <span data-id="{{ movie.id }}" class="star half starR1" data-value="0.5">별1_왼쪽</span>
     <span data-id="{{ movie.id }}" class="star one starR2" data-value="1">별1_오른쪽</span>
     <span data-id="{{ movie.id }}" class="star one_half starR1" data-value="1.5">별2_왼쪽</span>
@@ -32,12 +32,7 @@
     });
   })
 
-  $('.starRev span').click(function () {
-    $('.starRev span').off();
-    $(this).parent().children('span').removeClass('on');
-    $(this).addClass('on').prevAll('span').addClass('on');
-    return false;
-  });
+  
 
   const starButtons = document.querySelectorAll('.star')
   starButtons.forEach(function (starButton) {
@@ -45,6 +40,12 @@
       console.log(event.target.dataset)
       const starPoint = event.target.dataset.value
       const movieId = event.target.dataset.id
+      $('#event-movieId span').click(function () {
+        $('#event-movieId span').off();
+        $(this).parent().children('span').removeClass('on');
+        $(this).addClass('on').prevAll('span').addClass('on');
+        return false;
+      });
       console.log(movieId, starPoint)
       axios.get(`/movies/list/${movieId}/${starPoint}/`)
         .then(response => {
