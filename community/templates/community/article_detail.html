@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>article Detail Page</h1>
-
-<p>{{ article.pk }}번째 리뷰</p>
-<p>리뷰제목 : {{ article.title }}</p>
-<p>리뷰영화 : {{ article.movie_title }}</p>
-<p>리뷰내용 : {{ article.content }}</p>
+<p>{{ article.pk }}번째 글</p>
+<p>글 제목 : {{ article.title }}</p>
+<p>내용 : {{ article.content }}</p>
 <p>작성시각 : {{ article.created_at }}</p>
 <p>수정시각 : {{ article.updated_at }}</p>
 

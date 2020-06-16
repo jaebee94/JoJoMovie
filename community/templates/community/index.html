@@ -23,7 +23,7 @@
                 {% for article in page_obj %}
                 <tr>
                     <th scope="row">{{ article.pk }}</th>
-                    <td><a herf="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
+                    <td><a href="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
                     <td>{{ article.user }}</td>
                     <td>{{ article.created_at|date:"Y-m-d" }}</td>
                 </tr>

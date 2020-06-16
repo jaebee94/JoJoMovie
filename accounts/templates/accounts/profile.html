@@ -10,12 +10,12 @@
       <p>{{ user.like_movies.all|length }} 개</p>
     </div>
     <div class="col-2">
-      <p>작성한 리뷰</p>
-      <p>{{ user.review.all|length }} 개</p>
+      <p>작성한 글</p>
+      <p>{{ user.article_set.all|length }} 개</p>
     </div>
     <div class="col-2">
       <p>작성한 댓글</p>
-      <p>{{ user.comment.all|length }} 개</p>
+      <p>{{ user.comment_set.all|length }} 개</p>
     </div>
     <div class="col-6">
       <p>Ai(beta) 기반 추천 영화</p>
