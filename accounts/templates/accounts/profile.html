@@ -48,15 +48,15 @@
   </div>
   <div class="row">
     <div class="col-6">
-      <p>최근 작성한 리뷰</p>
-      {% for review in user.review_set.all %}
-      <p>{{ review.title }}</p>
+      <p>최근 작성한 글</p>
+      {% for article in user.article_set.all %}
+      <p>{{ article.title }}</p>
       {% endfor %}
       <p></p>
     </div>
     <div class="col-6">
       <p>최근 작성한 댓글</p>
-      {% for review in user.comment_set.all %}
+      {% for comment in user.comment_set.all %}
       <p>{{ comment.content }}</p>
       {% endfor %}
     </div>
