@@ -42,7 +42,7 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect('community:index')
+    return redirect('movies:index')
 
 @login_required
 def profile(request, pk):
