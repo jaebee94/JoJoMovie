@@ -72,6 +72,7 @@ def update(request, article_pk):
         else:
             form = ArticleForm(instance=article)
         context = {
+            'article': article,
             'form': form
         }
         return render(request, 'community/form.html', context)
@@ -84,7 +85,7 @@ def delete(request, article_pk):
         article.delete()
     else:
         return redirect('community:detail', article.pk)
-    return redirect('community:index')
+    return redirect('movies:index')
 
 @require_POST
 def comment_create(request, article_pk):

@@ -5,32 +5,55 @@
 <div class="container">
     {% if request.resolver_match.url_name == 'create' %}
     <h2>글 작성</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-header">
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">제목</span>
+                    </div> 
+                    <input type="text" class="form-control" name="title" maxlength="100" id="id_title">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="input-group-append">
+                    <span class="input-group-text">내용</span>
+                </div>
+                <input type="text" name="content" id="id_content" class="form-control">
+            </div>
+          </div>
+        <div class="btns">
+            <a href="{% url 'community:index' %}" class="btn btn-primary">BACK</a>
+            <input class="btn btn-primary" type="submit" value="제출">
+        </div>
+        </form>
     {% else %}
     <h2>수정하기</h2>
-    {% endif %}
     <form action="" method="POST">
-    {% csrf_token %}
-    <div class="card">
-        <div class="card-header">
-            <div class="input-group">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-header">
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <span class="input-group-text">제목</span>
+                    </div> 
+                    <input type="text" class="form-control" name="title" maxlength="100" id="id_title" value="{{ article.title }}">
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="input-group-append">
-                    <span class="input-group-text">제목</span>
-                </div> 
-                <input type="text" class="form-control" name="title" maxlength="100" id="id_title" value="">
+                    <span class="input-group-text">내용</span>
+                </div>
+                <input type="text" name="content" id="id_content" class="form-control" value="{{ article.content }}">
             </div>
+          </div>
+        <div class="btns">
+            <a href="{% url 'community:index' %}" class="btn btn-primary">BACK</a>
+            <input class="btn btn-primary" type="submit" value="제출">
         </div>
-        <div class="card-body">
-            <div class="input-group-append">
-                <span class="input-group-text">내용</span>
-            </div>
-            <input type="text" name="content" id="id_content" class="form-control" value="">
-        </div>
-      </div>
-    <div class="btns">
-        <a href="{% url 'community:index' %}" class="btn btn-primary">BACK</a>
-        <input class="btn btn-primary" type="submit" value="제출">
-    </div>
-</form>
+        </form>
+    {% endif %}
 </div>
 
 <script>
