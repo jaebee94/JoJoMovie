@@ -7,11 +7,47 @@
 {% else %}
 <h2> 수정하기 </h2>
 {% endif %}
+<div class="container">
 <form action="" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="제출">
+    <div class="card">
+        <div class="card-header">
+            <div class="input-group">
+                <div class="input-group-append">
+                    <span class="input-group-text">제목</span>
+                </div>
+                <input type="text" class="form-control" name="title" maxlength="100" id="id_title">
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="input-group-append">
+                <span class="input-group-text">내용</span>
+            </div>
+            <input type="text" name="content" class="form-control">
+        </div>
+      </div>
+    <div class="btns">
+        <a href="{% url 'community:index' %}" class="btn btn-primary">BACK</a>
+        <input class="btn btn-primary" type="submit" value="제출">
+    </div>
 </form>
-<a href="{% url 'community:index' %}">BACK</a>
+</div>
+
+<script>
+    // var art_content = document.getElementById()
+</script>
+
+<style>
+.card-body input {
+    height: 400px;
+}
+.card {
+    margin-bottom: 1rem;
+}
+.btns {
+    margin-right: 1rem;
+}
+</style>
 
 {% endblock %}
