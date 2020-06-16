@@ -4,18 +4,32 @@ from django.contrib.auth.decorators import login_required
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from django.core.paginator import Paginator
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 def index(request):
+    search_key = request.GET.get('search_key', None)
+    search_type = request.GET.getlist('search_type', None)
+    selected_val = None
     articles = Article.objects.order_by('-pk')
-    paginator = Paginator(articles, 3)
+    if search_key:
+        if 'title' in search_type:
+            articles = articles.filter(title__contains=search_key)
+            selected_val = 'title'
+        elif 'content' in search_type:
+            articles = articles.filter(content__contains=search_key)
+            selected_val = 'content'
+    else:
+        articles = Article.objects.order_by('-pk')
 
+    paginator = Paginator(articles, 3)
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)
 
     context = {
         'articles': articles,
         'page_obj': page_obj,
+        'selected_val' : selected_val,
     }
     return render(request, 'community/index.html', context)
 
