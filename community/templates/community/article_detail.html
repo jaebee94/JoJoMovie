@@ -52,12 +52,36 @@
           {{ comment.content }}
         </div>
         {% if user == comment.user %}
-        <div class="buttons">
+        <div class="btns">
           <form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <button class="btn btn-danger">삭제</button>
+            <button class="btn btn-danger">삭제</button>
           </form>
-          <!-- <a href="" class="btn btn-primary">수정</a> -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#comment_update">
+            수정
+          </button>
+          <!-- 댓글 수정 모달 -->
+          <div class="modal fade" id="comment_update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">댓글을 수정합니다.</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form action="{% url 'community:comment_update' article.pk comment.pk %}" method="POST">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                      <input type="text" name="content" class="form-control" value="{{ comment.content }}">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="수정">
+                  </div>
+                </form>
+              </div>
+            </div>
         </div>
         {% endif %}
       </article>
@@ -76,7 +100,7 @@
     </div> -->
     
 </div>
-
+<!-- 글 삭제 모달 -->
 <div class="modal fade" id="article_delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -99,6 +123,8 @@
       </div>
     </div>
   </div>
+  
+  </div>
 
 
 <style>
@@ -120,6 +146,16 @@
 .buttons {
   text-align: right;
 }
+.btns{
+  text-align: right;
+}
+.btns button {
+  float: right;
+  margin-left: 0.25rem;
+}
+/* .btns form {
+  justify-content: flex-start;
+} */
 .comment_content {
   margin-top: 1rem;
 }

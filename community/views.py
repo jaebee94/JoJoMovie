@@ -51,9 +51,11 @@ def create(request):
 
 def detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
+    comment = Comment.objects.filter(article=article)
     form = CommentForm()
     context = {
         'article': article,
+        'comment': comment,
         'form': form,
     }
     return render(request, 'community/article_detail.html', context)
@@ -120,7 +122,8 @@ def comment_update(request, article_pk, comment_pk):
         else:
             form = CommentForm(instance=comment)
         context = {
-            'form': form
+            'form': form,
+            'comment': comment,
         }
         return render(request, 'community/form.html', context)
     return redirect('community:detail', article.pk)
