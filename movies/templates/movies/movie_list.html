@@ -3,25 +3,30 @@
 {% block content %}
 <div id="app">
   <div class="container wrapper">
-    <h1>Movie List</h1>
+    <h1>JOJOBOX</h1>
     <div class="row">
       <div class="movie-container col-3" v-for="movie in movies">
         <img class="movie-poster" :src="movie.fields.poster_path" alt="">
         <div class="darkness"></div>
         <div class="hover-box">
           <h5>[[ movie.fields.title ]]</h5>
-          <a href="">상세보기</a>
+          <a :href="movie.fields.detail_url">상세보기</a>
           <div class="starRev" :id="movie.pk">
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="0.5">별1_왼쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="1">별1_오른쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="1.5">별2_왼쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="2">별2_오른쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="2.5">별3_왼쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="3">별3_오른쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="3.5">별4_왼쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="4">별4_오른쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="4.5">별5_왼쪽</span>
-            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="5">별5_오른쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR1"
+              data-value="0.5">별1_왼쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="1">별1_오른쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR1"
+              data-value="1.5">별2_왼쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="2">별2_오른쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR1"
+              data-value="2.5">별3_왼쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="3">별3_오른쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR1"
+              data-value="3.5">별4_왼쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="4">별4_오른쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR1"
+              data-value="4.5">별5_왼쪽</span>
+            <span :id="movie.fields.event_id" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="5">별5_오른쪽</span>
           </div>
         </div>
       </div>
@@ -41,9 +46,14 @@
     },
     methods: {
       getMovies: function () {
-        axios.get(`/movies/list/get_movies/${this.page++}`)
+        axios.get(`/movies/list/get_movies/${this.page}`)
           .then(res => {
+            console.log(this.page)
+            this.page = this.page + 1
             res.data.forEach(item => {
+              console.log(item)
+              item.fields["detail_url"] = `/movies/${item.pk}`
+              item.fields["event_id"] = `event-${item.pk}`
               item.fields.poster_path = `https://image.tmdb.org/t/p/w300${item.fields.poster_path}`
             })
             this.movies.push(...res.data)
@@ -67,7 +77,7 @@
           this.getMovies()
         }
       },
-      addRating: function() {
+      addRating: function () {
         const starPoint = event.target.dataset.value
         const movieId = event.target.dataset.id
         console.log(starPoint)
@@ -77,13 +87,9 @@
           .catch(error => {
 
           })
-        var click_id = $(this).attr('id');
-        console.log(click_id)
-        $('.starRev #' + click_id).off();
-        $(this).parent().children('span').removeClass('on');
-        $(this).addClass('on').prevAll('span').addClass('on');
+
       },
-      displayStar: function() {
+      displayStar: function () {
       }
     },
 
@@ -98,21 +104,35 @@
     },
 
     updated: function () {
+      console.log('updated')
       this.loadUntilViewportIsFull()
       $(document).ready(function () {
-      $('.starRev span').on('mouseenter', function () {
+        $('.starRev span').on('mouseenter', function () {
+          $(this).parent().children('span').removeClass('on');
+          $(this).addClass('on').prevAll('span').addClass('on');
+        });
+        $('.starRev span').on('mouseleave', function () {
+          $(this).parent().children('span').removeClass('on');
+        });
+      });
+      $('.starRev span').on('click', function () {
+        var click_id = $(this).attr('id');
+        $('.starRev #' + click_id).off();
         $(this).parent().children('span').removeClass('on');
         $(this).addClass('on').prevAll('span').addClass('on');
       });
-      $('.starRev span').on('mouseleave', function () {
-        $(this).parent().children('span').removeClass('on');
-      });
-    })
     },
   })
 </script>
 
 <style>
+  h1{
+    font-size: 8rem;
+    color:antiquewhite;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: bold;
+  }
   .starRev {
     margin: 0 52px;
   }
@@ -194,6 +214,10 @@
   .movie-container:hover .hover-box {
     opacity: 1;
     transform: scale(1);
+  }
+
+  #bottomSensor {
+    height: 10px;
   }
 </style>
 {% endblock %}
