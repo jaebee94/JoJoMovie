@@ -36,7 +36,7 @@
       {% endif %}
 
     <p>댓글목록</p>
-    {% for comment in article.comment_set.all %}
+    {% for comment in article.comment_set.all|dictsortreversed:"created_at" %}
     <div class="card">
       <article class="comment m-3">
         <header>
@@ -87,13 +87,13 @@
           </button>
         </div>
         <div class="modal-body">
-          작성자가 아니면 삭제할 수 없습니다.
+          삭제하면 되돌릴 수 없습니다.
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <form action="{% url 'community:delete' article.pk %}" method="POST">
             {% csrf_token %}
-            <input type="submit" class="btn btn-primary" value="삭제">
+            <input type="submit" class="btn btn-danger" value="삭제">
           </form>
         </div>
       </div>
