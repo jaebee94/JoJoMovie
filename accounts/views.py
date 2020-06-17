@@ -4,8 +4,9 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from movies.models import Rating, Movie
+from django.contrib import messages
 
 # Create your views here.
 def signup(request):
@@ -17,6 +18,9 @@ def signup(request):
             user = form.save()
             auth_login(request, user)
             return redirect('movies:index')
+        else:
+            messages.add_message(request, messages.INFO, '다시 시도해주세요')
+            return render(request, 'accounts/login_signup.html')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -29,9 +33,16 @@ def login(request):
         return redirect('movies:index')
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
             return redirect('movies:index')
+        else:
+            messages.add_message(request, messages.INFO, 'username or password not correct')
+            return render(request, 'accounts/login_signup.html')
     else:
         form = AuthenticationForm()
     context = {

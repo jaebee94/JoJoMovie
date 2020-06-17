@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if messages %}
+    <div class="container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+        [{{ message.tags }}]
+        [{{ message.message }}]
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
 <div class="wrap">
     <div class="form-wrap">
         <div class="button-wrap">
@@ -23,6 +34,9 @@
         </form>
     </div>
 </div>
+
+
+
 <script>
     var x = document.getElementById("login");
     var y = document.getElementById("register");
