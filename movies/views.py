@@ -4,7 +4,7 @@ from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 import json
 import urllib.request
-from .models import Movie, Genre
+from .models import Movie, Genre, Rating
 
 from .forms import RatingForm
 
@@ -129,16 +129,23 @@ def get_movies(request, page):
 def star_review(request, movie_pk, star_point):
     movie = get_object_or_404(Movie, pk=movie_pk)
     form = RatingForm()
-    rating = form.save(commit=False)
-    rating.user = request.user
-    rating.movie = movie
-    if float(star_point) <= 5:
-        rating.point = float(star_point)
-        rating.save()
+    print(movie_pk)
+    ratings = Rating.objects.filter(user=request.user)
 
-    # if form.is_valid():
-    #     rating = form.save()
-    # else:
-    #     print('실패')
+    if len(ratings):
+        for rating in ratings:
+            print(rating.movie)
+            print(movie)
+            if rating.movie == movie:
+                rating.point = star_point
+                rating.save()
+                break
+    else:
+        rating = form.save(commit=False)
+        rating.user = request.user
+        rating.movie = movie
+        if float(star_point) <= 5:
+            rating.point = float(star_point)
+            rating.save()
 
     return JsonResponse({})
