@@ -22,7 +22,7 @@ def index(request):
     else:
         articles = Article.objects.order_by('-pk')
         
-    paginator = Paginator(articles, 3)
+    paginator = Paginator(articles, 5)
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)
 

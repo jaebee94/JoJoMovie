@@ -11,8 +11,14 @@
   </div>
   <div class="recommend">
     <div class="recommend_in">
+
       <h2>재미있는 영화들을 지금 바로 만나보세요!</h2>
-      <a href="{% url 'movies:movie_list' %}"><button type="button" class="btn btn-secondary">GO</button></a>
+      {% if user.is_authenticated %}
+      <<a href="{% url 'movies:movie_list' %}"><button type="button" class="btn btn-secondary">GO</button></a>
+      {% else %}
+      <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-primary">GO</button></a>
+      {% endif %}
+
     </div>
   </div>
 
@@ -52,7 +58,8 @@
       </div>
       <div class="trailer-content col-4" >
         <h1 v-html="firstMovie.title"></h1>
-        <span>개봉일: </span><span v-html="firstMovie.release_date"></span><br><br>
+        <label for="release_date">개봉일: <span name="release_date" v-html="firstMovie.release_date"></span></label><br>
+        <label for="votes">평점: <span name="votes" v-html="firstMovie.vote_average"></span></label>
         <p v-html="firstMovie.overview"></p>
       </div>
     </div>
@@ -136,7 +143,9 @@
   justify-content:center;
   height: 100px;
   vertical-align: middle;
+
   background-color:antiquewhite
+
 }
 .recommend_in{
   text-align: center;
