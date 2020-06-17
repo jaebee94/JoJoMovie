@@ -54,7 +54,6 @@ def profile(request, pk):
     for user_rating in user_ratings:
         user_genres = user_rating.movie.genres.all()
         for user_genre in user_rating.movie.genres.all():
-            print(user_genre.name, user_rating.point)
             if user_genre.name in genres_dict:
                 genres_dict[user_genre.name] += user_rating.point
                 genres_count[user_genre.name] += 1
@@ -66,24 +65,28 @@ def profile(request, pk):
     for key in genres_count:
         genres_dict[key] /= genres_count[key]
     genres_sort = sorted(genres_dict.items(), key=lambda x:x[1], reverse=True)
-
-    most_liked_genre = genres_sort[0][0]
-    recommend_movies = []
-    for movie in Movie.objects.order_by('-popularity'):
-        for genre in movie.genres.all():
-            if most_liked_genre == genre.name:
-                recommend_movies.append(movie)
-                print(movie.title, genre.name)
+    if genres_sort:
+        most_liked_genre = genres_sort[0][0]
+        recommend_movies = []
+        for movie in Movie.objects.order_by('-popularity'):
+            for genre in movie.genres.all():
+                if most_liked_genre == genre.name:
+                    recommend_movies.append(movie)
+                    break
+            if len(recommend_movies) == 24:
                 break
-        print(len(recommend_movies))
-        if len(recommend_movies) > 10:
-            break
-    print(recommend_movies)
-    print(genres_sort[0])
-    print(genres_dict)
+    else:
+        recommend_movies = Movie.objects.order_by('-popularity')[:24]
+
+    recommended_list = []
+    for i in range(4):
+        recommended_list.append(recommend_movies[i*6:(i+1)*6])
+
     context = {
         'user': user,
         'user_ratings': user_ratings,
+        'most_liked_genre': most_liked_genre,
         'recommend_movies': recommend_movies,
+        'recommended_list': recommended_list,
     }
     return render(request, 'accounts/profile.html', context)

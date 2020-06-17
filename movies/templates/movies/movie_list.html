@@ -14,13 +14,17 @@
         <div class="starRev {{movie.id}}" id="event-{{movie.id}}">
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star half starR1" data-value="0.5">별1_왼쪽</span>
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star one starR2" data-value="1">별1_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star one_half starR1" data-value="1.5">별2_왼쪽</span>
+          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star one_half starR1"
+            data-value="1.5">별2_왼쪽</span>
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star two starR2" data-value="2">별2_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star two_half starR1" data-value="2.5">별3_왼쪽</span>
+          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star two_half starR1"
+            data-value="2.5">별3_왼쪽</span>
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star three starR2" data-value="3">별3_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star three_half starR1" data-value="3.5">별4_왼쪽</span>
+          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star three_half starR1"
+            data-value="3.5">별4_왼쪽</span>
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star four starR2" data-value="4">별4_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star four_half starR1" data-value="4.5">별5_왼쪽</span>
+          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star four_half starR1"
+            data-value="4.5">별5_왼쪽</span>
           <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star five starR2" data-value="5">별5_오른쪽</span>
         </div>
       </div>
@@ -40,15 +44,15 @@
     });
   })
 
-  
+
   $('.starRev span').click(function () {
     var click_id = $(this).attr('id');
-    $('.starRev #'+click_id).off();
+    $('.starRev #' + click_id).off();
     $(this).parent().children('span').removeClass('on');
     $(this).addClass('on').prevAll('span').addClass('on');
     return false;
   });
-  
+
   const starButtons = document.querySelectorAll('.star')
   starButtons.forEach(function (starButton) {
     starButton.addEventListener('click', function (event) {
@@ -65,10 +69,68 @@
         })
     })
   })
+  const app = new Vue({
+    el: '#app',
+    data: {
+      photos: [],
+      page: 1,
+    },
+    methods: {
+      getPhotos: function () {
+        const options = {
+          params: {
+            _page: this.page++,
+            _limit: 3,
+          }
+        }
+        axios.get('https://jsonplaceholder.typicode.com/photos', options)
+          // .then(res => this.photos = res.data )   // 인자가 하나일 때는 이런 식으로 shortcut 사용 가능
+          .then(res => {
+            // console.log('>>> GET PHOTOS <<<')
+            this.photos = [...this.photos, ...res.data]
+          })
+          .catch(err => console.errer(err))
+      },
+      addScrollWatcher: function () {
+        const bottomSensor = document.querySelector('#bottomSensor')
+        const watcher = scrollMonitor.create(bottomSensor)
+        // watcher 가 화면에 들어오면, cb 하겠다.
+        watcher.enterViewport(() => {
+          setTimeout(() => {
+            this.getPhotos()
+          }, 500)
+        })
+      },
+      scrollToTop: function () {
+        scroll(0, 0)
+      },
+      loadUntilViewportIsFull: function () {
+        const bottomSensor = document.querySelector('#bottomSensor')
+        const watcher = scrollMonitor.create(bottomSensor)
+        if (watcher.isFullyInViewport) {
+          this.getPhotos()
+        }
+      }
+    },
+    // created: 초기화 이후 AJAX 요청을 보내기 좋은 시점(Data, Methods 에 접근 가능.)
+    created: function () {
+      this.getPhotos()
+    },
+
+    // mounted: DOM 과 Vue 인스턴스가 연동이 완료되고 난 이후에 실행할 일들.
+    mounted: function () {
+      this.addScrollWatcher()
+    },
+
+    // updated: data({}) 가 바뀌고 나서, 화면이 다시 렌더된 이후.
+    updated: function () {
+      this.loadUntilViewportIsFull()
+    },
+  })
 </script>
 
 <style>
-  .starRev{
+  .starRev {
     margin: 0 52px;
   }
 
@@ -107,49 +169,48 @@
   }
 
   .movie-container img {
-    position:absolute;
-    width:inherit;
-    height:inherit;
-    box-shadow: 0 1px 10px rgba(0,0,0,0.4);
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
   }
 
   .darkness {
-    position:absolute;
-    width:inherit;
-    height:inherit;
-    background:#000000;
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    background: #000000;
     /* 추가된 부분 */
-    opacity:0;
-    transition:all .6s linear;
+    opacity: 0;
+    transition: all .6s linear;
   }
 
   .hover-box {
-    position:absolute;
-    bottom:20px;
-    left:0;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
     padding: 0 15px;
-    text-align:center;
+    text-align: center;
     justify-content: center;
     /* 추가된 부분 */
-    opacity:0;
+    opacity: 0;
 
-    transition:all .3s linear;
+    transition: all .3s linear;
   }
 
-  .hover-box h5{
+  .hover-box h5 {
     color: white;
   }
 
   /* 추가된 부분 */
-  .movie-container:hover .darkness{
-    opacity:0.8;
+  .movie-container:hover .darkness {
+    opacity: 0.8;
   }
 
   /* 추가된 부분 */
   .movie-container:hover .hover-box {
-    opacity:1;
-    transform:scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
-
 </style>
 {% endblock %}
