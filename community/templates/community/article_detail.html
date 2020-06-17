@@ -12,7 +12,7 @@
           <p class="card-text times">작성자: {{ article.user }}</p>
           <p class="card-text times">최초작성: {{ article.created_at }}</p>
           <p class="card-text times">최종수정: {{ article.updated_at }}</p>
-          {% if user.is_authenticated %} 
+          {% if user == article.user %} 
           <div class="buttons">
             <a href="{% url 'community:update' article.pk %}" class="btn btn-primary">수정</a>
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#article_delete">
@@ -51,6 +51,7 @@
         <div class="comment_content">
           {{ comment.content }}
         </div>
+        {% if user == comment.user %}
         <div class="buttons">
           <form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
           {% csrf_token %}
@@ -58,6 +59,7 @@
           </form>
           <!-- <a href="" class="btn btn-primary">수정</a> -->
         </div>
+        {% endif %}
       </article>
     </div>
     {% endfor %}
