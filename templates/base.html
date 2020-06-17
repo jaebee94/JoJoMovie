@@ -25,10 +25,10 @@
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'movies:movie_list' %}">영화목록 <span class="sr-only"></span></a>
         </li>
-        {% if request.user.is_authenticated %}
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'community:index' %}">게시판 <span class="sr-only"></span></a>
         </li>
+        {% if request.user.is_authenticated %}
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'accounts:profile' user.pk %}">{{ request.user.username }}님 안녕하세요 <span
               class="sr-only"></span></a>
