@@ -128,24 +128,18 @@ def get_movies(request, page):
 @login_required
 def star_review(request, movie_pk, star_point):
     movie = get_object_or_404(Movie, pk=movie_pk)
-    form = RatingForm()
-    print(movie_pk)
+    
     ratings = Rating.objects.filter(user=request.user)
-
-    if len(ratings):
-        for rating in ratings:
-            print(rating.movie)
-            print(movie)
-            if rating.movie == movie:
-                rating.point = star_point
-                rating.save()
-                break
-    else:
-        rating = form.save(commit=False)
-        rating.user = request.user
-        rating.movie = movie
-        if float(star_point) <= 5:
-            rating.point = float(star_point)
+    for rating in ratings:
+        if rating.movie == movie:
+            rating.point = star_point
             rating.save()
-
+            return JsonResponse({})
+    form = RatingForm()
+    rating = form.save(commit=False)
+    rating.user = request.user
+    rating.movie = movie
+    if float(star_point) <= 5:
+        rating.point = float(star_point)
+        rating.save()
     return JsonResponse({})
