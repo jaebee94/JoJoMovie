@@ -52,6 +52,8 @@
       </div>
       <div class="trailer-content col-4" >
         <h1 v-html="firstMovie.title"></h1>
+        <label for="release_date">개봉일: <span name="release_date" v-html="firstMovie.release_date"></span></label><br>
+        <label for="votes">평점: <span name="votes" v-html="firstMovie.vote_average"></span></label>
         <p v-html="firstMovie.overview"></p>
       </div>
     </div>
