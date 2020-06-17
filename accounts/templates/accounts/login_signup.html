@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class=container>
+
 {% if messages %}
     <div class="container">
     {% for message in messages %}
@@ -34,7 +36,7 @@
         </form>
     </div>
 </div>
-
+</div>
 
 
 <script>
@@ -58,6 +60,10 @@
     * {
     margin: 0;
     padding: 0;
+}
+.container {
+    min-width: 960px;
+    max-width: 1200px;
 }
 .wrap {
     height: 100%;
@@ -121,6 +127,7 @@
     cursor: pointer;
     display: block;
     margin: auto;
+    margin-top: 2rem;
     background: linear-gradient(to right, #ff105f, #ffad06);
     border: 0;
     outline: none;

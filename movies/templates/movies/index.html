@@ -9,6 +9,13 @@
     <div class="logo logo1">J</div><div class="logo logo2">J</div><br>
     <div class="logo logo3">O</div><div class="logo logo4">O</div><div class="logo logo5">MOVIE</div>
   </div>
+  <div class="recommend">
+    <div class="recommend_in">
+      <h2>당신의 시간은 금입니다. 빠르게 영화 추천 받으세요</h2>
+      <a href="{% url 'accounts:profile' user.pk %}"><button type="button" class="btn btn-primary">추천 받으러 가기</button></a>
+    </div>
+  </div>
+
   <div id="carouselExampleIndicators" class="carousel slide boxoffice" data-ride="carousel">
     <h1>BOX OFFICE</h1>
     <hr>
@@ -119,6 +126,17 @@
   vertical-align: middle;
   /* padding: 150px 0; */
   border: black solid 5px;
+}
+.recommend{
+  justify-content:center;
+  height: 100px;
+  vertical-align: middle;
+  margin: 1rem;
+  border: black solid;
+  background-color: rgb(241, 95, 156);
+}
+.recommend_in{
+  text-align: center;
 }
 .logo{
   font-size: 50px;

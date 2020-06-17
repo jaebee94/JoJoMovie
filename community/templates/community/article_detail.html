@@ -9,7 +9,7 @@
         <div class="card-body">
           <h5 class="card-title">{{ article.content }}</h5>
           <hr>
-          <p class="card-text times">작성자: {{ article.user }}</p>
+          <p class="card-text times profile_link">작성자: <a href="{% url 'accounts:profile' article.user.pk %}">{{ article.user }}</a></p>
           <p class="card-text times">최초작성: {{ article.created_at }}</p>
           <p class="card-text times">최종수정: {{ article.updated_at }}</p>
           {% if user == article.user %} 
@@ -40,7 +40,7 @@
     <div class="card">
       <article class="comment m-3">
         <header>
-          <span class="username">{{ comment.user }}</span>
+          <span class="username profile_link"><a href="{% url 'accounts:profile' comment.user.pk %}">{{ comment.user }}</a></span>
           <div class="flex">
             <div class="float-right">
               <span class="times">최초작성: {{ comment.created_at|date:"Y-m-d-f" }}</span>
@@ -161,6 +161,11 @@
 }
 .times {
   text-align: right;
+}
+.profile_link > a{
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
 }
 </style>
 {% endblock %}
