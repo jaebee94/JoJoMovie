@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.core import serializers
+from django.http import JsonResponse, HttpResponse
 import json
 import urllib.request
 from .models import Movie, Genre
@@ -109,15 +110,20 @@ def detail(request, movie_pk):
     return render(request, 'movies/movie_detail.html', context)
 
 def movie_list(request):
-    movies = Movie.objects.all()
-    context = {
-        'movies': movies,
-    }
-    return render(request, 'movies/movie_list.html', context)
+    # movies = Movie.objects.all()
+    # context = {
+    #     'movies': movies,
+    # }
+    # return render(request, 'movies/movie_list.html', context)
+    return render(request, 'movies/movie_list.html')
 
-# def get_movies_json(request, page):
-#     movies = Movie.objects.all()[page*20:(page+1)*20]
-#     return JsonResponse(movies)
+def get_movies(request, page):
+    movies = Movie.objects.all()[page*30:(page+1)*30]
+    # for movie in movies:
+    #     movie.poster_path = 
+    movies_json = serializers.serialize('json', movies)
+    # print(movies_json)
+    return HttpResponse(movies_json, content_type="text/json-comment-filtered")
 
 @login_required
 def star_review(request, movie_pk, star_point):
