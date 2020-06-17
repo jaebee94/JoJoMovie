@@ -32,7 +32,11 @@
     <div class="recommend-box">
       <div class="recommend-box-title">
         <h3>추천영화</h3>
+        {% if user.rating_set.all|length == 0 %}
+        <span>영화를 평가해주세요. 지금은 인기있는 영화를 추천해드립니다.</span>
+        {% else %}
         <span>{{ user.username }}님이 가장 선호하는 장르는 <strong>{{ most_liked_genre }}</strong>입니다.</span>
+        {% endif %}
       </div>
       <div id="carouselExampleIndicators" class="carousel slide movie-slide" data-ride="carousel">
         <ol class="carousel-indicators">

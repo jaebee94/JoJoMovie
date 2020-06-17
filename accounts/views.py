@@ -41,7 +41,7 @@ def login(request):
             auth_login(request, user)
             return redirect('movies:index')
         else:
-            messages.add_message(request, messages.INFO, 'username or password not correct')
+            messages.add_message(request, messages.INFO, '아이디나 비밀번호가 일치하지 않습니다')
             return render(request, 'accounts/login_signup.html')
     else:
         form = AuthenticationForm()
@@ -87,6 +87,7 @@ def profile(request, pk):
             if len(recommend_movies) == 24:
                 break
     else:
+        most_liked_genre = ''
         recommend_movies = Movie.objects.order_by('-popularity')[:24]
 
     recommended_list = []
