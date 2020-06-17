@@ -12,7 +12,11 @@
   <div class="recommend">
     <div class="recommend_in">
       <h2>당신의 시간은 금입니다. 빠르게 영화 추천 받으세요</h2>
+      {% if user.is_authenticated %}
       <a href="{% url 'accounts:profile' user.pk %}"><button type="button" class="btn btn-primary">추천 받으러 가기</button></a>
+      {% else %}
+      <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-primary">추천 받으러 가기</button></a>
+      {% endif %}
     </div>
   </div>
 
@@ -135,7 +139,6 @@
   vertical-align: middle;
   margin: 1rem;
   border: black solid;
-  background-color: rgb(241, 95, 156);
 }
 .recommend_in{
   text-align: center;
