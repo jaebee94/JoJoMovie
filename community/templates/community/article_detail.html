@@ -9,14 +9,16 @@
         <div class="card-body">
           <h5 class="card-title">{{ article.content }}</h5>
           <hr>
-          <p class="card-text">작성자: {{ article.user }}</p>
-          <p class="card-text">최초작성: {{ article.created_at }}</p>
-          <p class="card-text">최종수정: {{ article.updated_at }}</p>
+          <p class="card-text times">작성자: {{ article.user }}</p>
+          <p class="card-text times">최초작성: {{ article.created_at }}</p>
+          <p class="card-text times">최종수정: {{ article.updated_at }}</p>
           {% if user.is_authenticated %} 
+          <div class="buttons">
             <a href="{% url 'community:update' article.pk %}" class="btn btn-primary">수정</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#article_delete">
                 삭제
-              </button>         
+            </button>         
+          </div>
           {% endif %}
         </div>
       </div>
@@ -32,11 +34,35 @@
           </div>
       </form>
       {% endif %}
+
     <p>댓글목록</p>
     {% for comment in article.comment_set.all %}
-    <form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
-    {% csrf_token %}
-    <div class="input-group">
+    <div class="card">
+      <article class="comment m-3">
+        <header>
+          <span class="username">{{ comment.user }}</span>
+          <div class="flex">
+            <div class="float-right">
+              <span class="times">최초작성: {{ comment.created_at|date:"Y-m-d-f" }}</span>
+              <span class="times">최종수정: {{ comment.updated_at|date:"Y-m-d-f" }}</span>
+            </div>
+          </div>
+        </header>
+        <div class="comment_content">
+          {{ comment.content }}
+        </div>
+        <div class="buttons">
+          <form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-primary">삭제</button>
+          </form>
+          <!-- <a href="" class="btn btn-primary">수정</a> -->
+        </div>
+      </article>
+    </div>
+    {% endfor %}
+
+    <!-- <div class="input-group">
         <ul class="list-group-horizontal row">
             <li class="list-group-item col-2">{{ comment.user }}</li>
             <li class="list-group-item col-5">{{ comment.content }}</li>
@@ -45,8 +71,8 @@
             <button class="input-group-text">댓글 삭제</button>
         </div>
         </ul>
-    </div>
-    {% endfor %}
+    </div> -->
+    
 </div>
 
 <div class="modal fade" id="article_delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -76,12 +102,27 @@
 <style>
 .container {
     min-width: 960px;
+    max-width: 1200px;
 }
 .comment {
-    width: 720px;
+    min-width: 960px;
+    max-width: 1200px;
+    margin-top: 1rem;
 }
 .list-group-item {
     width: 240px;
+}
+.section {
+  box-sizing: border-box;
+}
+.buttons {
+  text-align: right;
+}
+.comment_content {
+  margin-top: 1rem;
+}
+.times {
+  text-align: right;
 }
 </style>
 {% endblock %}
