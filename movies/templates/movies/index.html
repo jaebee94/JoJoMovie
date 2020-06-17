@@ -64,7 +64,7 @@
     $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
   });
 
-  const API_KEY = 'AIzaSyA3AI1maKoEbHFJ189Qeww-AzfeZR4PC-g'
+  const API_KEY = 'AIzaSyDtxVhqC2K5s_4dKjxlFioatc6pl89kMks'
   const API_URL = 'https://www.googleapis.com/youtube/v3/search'
   const app = new Vue({
 
@@ -82,7 +82,7 @@
             this.movies = response.data["results"]
             this.firstMovie = response.data['results'][0]
             response.data["results"].forEach(item => {
-              item.poster_path = `https://image.tmdb.org/t/p/original${item.poster_path}`
+              item.poster_path = `https://image.tmdb.org/t/p/w300${item.poster_path}`
             })
             for (var i = 0; i < 5; i++) {
               temp = Array();

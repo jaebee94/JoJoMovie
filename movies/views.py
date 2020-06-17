@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.core import serializers
+from django.http import JsonResponse, HttpResponse
 import json
 import urllib.request
-from .models import Movie, Genre
+from .models import Movie, Genre, Rating
 
 from .forms import RatingForm
 
@@ -109,30 +110,42 @@ def detail(request, movie_pk):
     return render(request, 'movies/movie_detail.html', context)
 
 def movie_list(request):
-    movies = Movie.objects.all()
-    context = {
-        'movies': movies,
-    }
-    return render(request, 'movies/movie_list.html', context)
+    # movies = Movie.objects.all()
+    # context = {
+    #     'movies': movies,
+    # }
+    # return render(request, 'movies/movie_list.html', context)
+    return render(request, 'movies/movie_list.html')
 
-# def get_movies_json(request, page):
-#     movies = Movie.objects.all()[page*20:(page+1)*20]
-#     return JsonResponse(movies)
+def get_movies(request, page):
+    movies = Movie.objects.all()[page*30:(page+1)*30]
+    # for movie in movies:
+    #     movie.poster_path = 
+    movies_json = serializers.serialize('json', movies)
+    # print(movies_json)
+    return HttpResponse(movies_json, content_type="text/json-comment-filtered")
 
 @login_required
 def star_review(request, movie_pk, star_point):
     movie = get_object_or_404(Movie, pk=movie_pk)
     form = RatingForm()
-    rating = form.save(commit=False)
-    rating.user = request.user
-    rating.movie = movie
-    if float(star_point) <= 5:
-        rating.point = float(star_point)
-        rating.save()
+    print(movie_pk)
+    ratings = Rating.objects.filter(user=request.user)
 
-    # if form.is_valid():
-    #     rating = form.save()
-    # else:
-    #     print('실패')
+    if len(ratings):
+        for rating in ratings:
+            print(rating.movie)
+            print(movie)
+            if rating.movie == movie:
+                rating.point = star_point
+                rating.save()
+                break
+    else:
+        rating = form.save(commit=False)
+        rating.user = request.user
+        rating.movie = movie
+        if float(star_point) <= 5:
+            rating.point = float(star_point)
+            rating.save()
 
     return JsonResponse({})

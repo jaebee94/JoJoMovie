@@ -1,130 +1,113 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container wrapper">
-  <h1>Movie List</h1>
-  <div class="row">
-    {% for movie in movies %}
-    <div class="movie-container col-3">
-      <img class="movie-poster" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="">
-      <div class="darkness"></div>
-      <div class="hover-box">
-        <h5>{{ movie.title }}</h5>
-        <a href="{% url 'movies:detail' movie.pk %}">상세보기</a>
-        <div class="starRev {{movie.id}}" id="event-{{movie.id}}">
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star half starR1" data-value="0.5">별1_왼쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star one starR2" data-value="1">별1_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star one_half starR1"
-            data-value="1.5">별2_왼쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star two starR2" data-value="2">별2_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star two_half starR1"
-            data-value="2.5">별3_왼쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star three starR2" data-value="3">별3_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star three_half starR1"
-            data-value="3.5">별4_왼쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star four starR2" data-value="4">별4_오른쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star four_half starR1"
-            data-value="4.5">별5_왼쪽</span>
-          <span id="event-{{movie.id}}" data-id="{{ movie.id }}" class="star five starR2" data-value="5">별5_오른쪽</span>
+<div id="app">
+  <div class="container wrapper">
+    <h1>Movie List</h1>
+    <div class="row">
+      <div class="movie-container col-3" v-for="movie in movies">
+        <img class="movie-poster" :src="movie.fields.poster_path" alt="">
+        <div class="darkness"></div>
+        <div class="hover-box">
+          <h5>[[ movie.fields.title ]]</h5>
+          <a href="">상세보기</a>
+          <div class="starRev" :id="movie.pk">
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="0.5">별1_왼쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="1">별1_오른쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="1.5">별2_왼쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="2">별2_오른쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="2.5">별3_왼쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="3">별3_오른쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="3.5">별4_왼쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="4">별4_오른쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR1" data-value="4.5">별5_왼쪽</span>
+            <span :id="movie.pk" @click="addRating" :data-id="movie.pk" class="star starR2" data-value="5">별5_오른쪽</span>
+          </div>
         </div>
       </div>
     </div>
-    {% endfor %}
   </div>
+  <div id="bottomSensor"></div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/scrollmonitor/1.2.0/scrollMonitor.js"></script>
 <script>
-  $(document).ready(function () {
-    $('.starRev span').on('mouseenter', function () {
-      $(this).parent().children('span').removeClass('on');
-      $(this).addClass('on').prevAll('span').addClass('on');
-    });
-    $('.starRev span').on('mouseleave', function () {
-      $(this).parent().children('span').removeClass('on');
-    });
-  })
-
-
-  $('.starRev span').click(function () {
-    var click_id = $(this).attr('id');
-    $('.starRev #' + click_id).off();
-    $(this).parent().children('span').removeClass('on');
-    $(this).addClass('on').prevAll('span').addClass('on');
-    return false;
-  });
-
-  const starButtons = document.querySelectorAll('.star')
-  starButtons.forEach(function (starButton) {
-    starButton.addEventListener('click', function (event) {
-      console.log(event.target.dataset)
-      const starPoint = event.target.dataset.value
-      const movieId = event.target.dataset.id
-      console.log(movieId, starPoint)
-      axios.get(`/movies/list/${movieId}/${starPoint}/`)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-
-        })
-    })
-  })
   const app = new Vue({
+    delimiters: ['[[', ']]'],
     el: '#app',
     data: {
-      photos: [],
-      page: 1,
+      movies: [],
+      page: 0,
     },
     methods: {
-      getPhotos: function () {
-        const options = {
-          params: {
-            _page: this.page++,
-            _limit: 3,
-          }
-        }
-        axios.get('https://jsonplaceholder.typicode.com/photos', options)
-          // .then(res => this.photos = res.data )   // 인자가 하나일 때는 이런 식으로 shortcut 사용 가능
+      getMovies: function () {
+        axios.get(`/movies/list/get_movies/${this.page++}`)
           .then(res => {
-            // console.log('>>> GET PHOTOS <<<')
-            this.photos = [...this.photos, ...res.data]
+            res.data.forEach(item => {
+              item.fields.poster_path = `https://image.tmdb.org/t/p/w300${item.fields.poster_path}`
+            })
+            this.movies.push(...res.data)
+            console.log('data가져옴')
           })
-          .catch(err => console.errer(err))
+          .catch(err => console.log(err))
       },
       addScrollWatcher: function () {
         const bottomSensor = document.querySelector('#bottomSensor')
         const watcher = scrollMonitor.create(bottomSensor)
-        // watcher 가 화면에 들어오면, cb 하겠다.
         watcher.enterViewport(() => {
-          setTimeout(() => {
-            this.getPhotos()
-          }, 500)
+          console.log('감지')
+          this.getMovies()
         })
-      },
-      scrollToTop: function () {
-        scroll(0, 0)
       },
       loadUntilViewportIsFull: function () {
         const bottomSensor = document.querySelector('#bottomSensor')
         const watcher = scrollMonitor.create(bottomSensor)
+        console.log('꽉찼아용')
         if (watcher.isFullyInViewport) {
-          this.getPhotos()
+          this.getMovies()
         }
+      },
+      addRating: function() {
+        const starPoint = event.target.dataset.value
+        const movieId = event.target.dataset.id
+        console.log(starPoint)
+        axios.get(`/movies/list/${movieId}/${starPoint}/`)
+          .then(response => {
+          })
+          .catch(error => {
+
+          })
+        var click_id = $(this).attr('id');
+        console.log(click_id)
+        $('.starRev #' + click_id).off();
+        $(this).parent().children('span').removeClass('on');
+        $(this).addClass('on').prevAll('span').addClass('on');
+      },
+      displayStar: function() {
       }
     },
-    // created: 초기화 이후 AJAX 요청을 보내기 좋은 시점(Data, Methods 에 접근 가능.)
+
     created: function () {
-      this.getPhotos()
+      this.getMovies()
+      console.log('created')
     },
 
-    // mounted: DOM 과 Vue 인스턴스가 연동이 완료되고 난 이후에 실행할 일들.
     mounted: function () {
       this.addScrollWatcher()
+      console.log('mounted')
     },
 
-    // updated: data({}) 가 바뀌고 나서, 화면이 다시 렌더된 이후.
     updated: function () {
       this.loadUntilViewportIsFull()
+      $(document).ready(function () {
+      $('.starRev span').on('mouseenter', function () {
+        $(this).parent().children('span').removeClass('on');
+        $(this).addClass('on').prevAll('span').addClass('on');
+      });
+      $('.starRev span').on('mouseleave', function () {
+        $(this).parent().children('span').removeClass('on');
+      });
+    })
     },
   })
 </script>
