@@ -51,6 +51,7 @@
         <div class="comment_content">
           {{ comment.content }}
         </div>
+        {% if user == comment.user %}
         <div class="buttons">
           <form action="{% url 'community:comment_delete' article.pk comment.pk %}" method="POST">
           {% csrf_token %}
@@ -58,6 +59,7 @@
           </form>
           <!-- <a href="" class="btn btn-primary">수정</a> -->
         </div>
+        {% endif %}
       </article>
     </div>
     {% endfor %}
