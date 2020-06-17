@@ -9,16 +9,22 @@
     <div class="contatiner">
       <div class="row">
         <div class="col-2">
-          <p>평가한 영화</p>
-          <p>{{ user_ratings|length }} 개</p>
+          <div class="profile_box">
+            <p>평가한 영화</p>
+            <p class="box_letter">{{ user_ratings|length }}</p>
+          </div>
         </div>
         <div class="col-2">
-          <p>작성한 글</p>
-          <p>{{ user.article_set.all|length }} 개</p>
+          <div class="profile_box">
+            <p>작성한 글</p>
+            <p class="box_letter">{{ user.article_set.all|length }}</p>
+          </div>
         </div>
         <div class="col-2">
-          <p>작성한 댓글</p>
-          <p>{{ user.comment_set.all|length }} 개</p>
+          <div class="profile_box">
+            <p>작성한 댓글</p>
+            <p class="box_letter">{{ user.comment_set.all|length }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -93,6 +99,16 @@
   .indicator{
     width: 50px;
   }
-
+  .profile_box {
+    border-radius: 25px;
+    background: white;
+    padding: 20px;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+  }
+  .box_letter {
+    font-size: 50px;
+  }
 </style>
 {% endblock %}
