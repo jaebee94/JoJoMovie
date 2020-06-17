@@ -129,11 +129,8 @@ def get_movies(request, page):
 def star_review(request, movie_pk, star_point):
     movie = get_object_or_404(Movie, pk=movie_pk)
     
-    print(movie_pk)
     ratings = Rating.objects.filter(user=request.user)
     for rating in ratings:
-        print(rating.movie)
-        print(movie)
         if rating.movie == movie:
             rating.point = star_point
             rating.save()
