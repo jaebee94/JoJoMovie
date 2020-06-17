@@ -20,12 +20,16 @@
                 <div class="input-group-append">
                     <span class="input-group-text">내용</span>
                 </div>
-                <input type="text" name="content" id="id_content" class="form-control">
+                <textarea type="text" name="content" id="id_content" class="form-control"></textarea>
             </div>
           </div>
-        <div class="btns">
-            <a href="{% url 'community:index' %}" class="btn btn-primary">BACK</a>
-            <input class="btn btn-primary" type="submit" value="제출">
+        <div class="buttons">
+            <div class="float-left">
+                <a href="{% url 'community:index' %}" class="btn btn-light">BACK</a>
+            </div>
+            <div class="float-right">
+                <input class="btn btn-success" type="submit" value="제출">
+            </div>
         </div>
         </form>
     {% else %}
@@ -45,7 +49,7 @@
                 <div class="input-group-append">
                     <span class="input-group-text">내용</span>
                 </div>
-                <input type="text" name="content" id="id_content" class="form-control" value="{{ article.content }}">
+                <textarea type="text" name="content" id="id_content" class="form-control">{{ article.content }}</textarea>
             </div>
           </div>
         <div class="btns">
@@ -63,14 +67,14 @@
 .div container {
     max-width: 1200px;
 }
-.card-body input {
+.card-body textarea {
     height: 400px;
 }
 .card {
     margin-bottom: 1rem;
 }
-.btns {
-    margin-right: 1rem;
+.buttons {
+    display: float;
 }
 </style>
 
