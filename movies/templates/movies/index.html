@@ -14,9 +14,9 @@
 
       <h2>재미있는 영화들을 지금 바로 만나보세요!</h2>
       {% if user.is_authenticated %}
-      <<a href="{% url 'movies:movie_list' %}"><button type="button" class="btn btn-secondary">GO</button></a>
+      <a href="{% url 'movies:movie_list' %}"><button type="button" class="btn btn-secondary">GO</button></a>
       {% else %}
-      <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-primary">GO</button></a>
+      <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-secondary">GO</button></a>
       {% endif %}
 
     </div>
@@ -72,7 +72,7 @@
     $('#carouselExampleIndicators').find('.carousel-item').first().addClass('active');
   });
 
-  const API_KEY = 'AIzaSyDtxVhqC2K5s_4dKjxlFioatc6pl89kMks'
+  const API_KEY = 'AIzaSyA3AI1maKoEbHFJ189Qeww-AzfeZR4PC-g'
   const API_URL = 'https://www.googleapis.com/youtube/v3/search'
   const app = new Vue({
 
